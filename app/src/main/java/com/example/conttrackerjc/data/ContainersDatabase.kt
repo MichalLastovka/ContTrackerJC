@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [Container::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class ContainersDatabase: RoomDatabase() {

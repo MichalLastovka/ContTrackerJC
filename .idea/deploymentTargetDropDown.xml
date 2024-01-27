@@ -2,6 +2,15 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="PrevShip">
+        <State />
+      </entry>
+      <entry key="PrevTerminal">
+        <State />
+      </entry>
+      <entry key="PrevTitle">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>

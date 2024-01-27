@@ -21,10 +21,8 @@ fun Navigation(
         composable("container/{id}")
         {
             val id = it.arguments?.getString("id")
-            println(id)
             viewModel.getContainerById(id!!)
-            print(viewModel.getContainerById(id))
-            ContainerScreen(container = state.wantedCont!!)
+            ContainerScreen(container = state.wantedCont)
         }
     }
 }

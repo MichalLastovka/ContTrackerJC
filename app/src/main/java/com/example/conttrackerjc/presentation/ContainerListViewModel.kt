@@ -7,7 +7,9 @@ import com.example.conttrackerjc.data.Container
 import com.example.conttrackerjc.data.ContainerAPIService
 import com.example.conttrackerjc.data.ContainerDTO
 import com.example.conttrackerjc.data.ContainersDatabase
+import com.example.conttrackerjc.data.PartialContainer
 import com.example.conttrackerjc.data.toContainer
+import com.example.conttrackerjc.data.toPartialContainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -90,6 +92,29 @@ class ContainerListViewModel : ViewModel(
                     switchDialog()
                 }
 
+                override fun onFailure(call: Call<ContainerDTO>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            }
+        )
+    }
+
+    fun updateContainer(container: PartialContainer){
+        viewModelScope.launch(Dispatchers.IO) {
+            db.updateContainer(container)
+        }
+    }
+    fun getAndUpdateContainer(id: String){
+        containerInterface.getContainerInfo(contId = id).enqueue(
+            object : Callback<ContainerDTO> {
+                override fun onResponse(
+                    call: Call<ContainerDTO>,
+                    response: Response<ContainerDTO>
+                ) {
+                    response.body()?.let {
+                        updateContainer(it.toPartialContainer())
+                    }
+                }
                 override fun onFailure(call: Call<ContainerDTO>, t: Throwable) {
                     t.printStackTrace()
                 }

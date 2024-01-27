@@ -1,21 +1,29 @@
 package com.example.conttrackerjc.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.conttrackerjc.R
 import com.example.conttrackerjc.data.Container
+import com.example.conttrackerjc.presentation.components.Reeder
+import com.example.conttrackerjc.presentation.components.Ship
+import com.example.conttrackerjc.presentation.components.Terminal
+import com.example.conttrackerjc.presentation.components.Title
 
 @Composable
 fun ContainerScreen(
@@ -27,45 +35,35 @@ fun ContainerScreen(
             .padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = container.containerId,
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = when(container.status){
-                "GELOESCHT" -> "(Složeno)"
-                "CONTAINER_NICHT_GELOESCHT" -> "(Nesloženo)"
-                else -> container.status.toString()},
-            color = if(container.status == "GELOESCHT") Color.Green else Color.Red,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Title(id = container.containerId, status = container.status)
+        Terminal(terminal = container.terminal)
+        Ship(name = container.vesselName, callSign = container.vesselCode)
+        Reeder(reeder = container.carrierName, container.carrierCode)
 
-        Row (
+        Row(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
-        ){
+        ) {
             Text(text = "Kód: ", fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Text(text = container.containerCode.toString())
         }
-        Row (
+        Row(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
-        ){
+        ) {
             Text(text = "Kód rejdaře: ", fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Text(text = container.carrierCode.toString())
         }
-        Row (
+        Row(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
-        ){
+        ) {
             Text(text = "Doručeno: ", fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Text(text = container.delivery.toString())
         }

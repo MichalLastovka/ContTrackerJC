@@ -21,3 +21,19 @@ data class Container(
     val isoCode: String?,
     val containerCode: String?
 )
+@Entity
+data class PartialContainer(
+    @PrimaryKey(autoGenerate = false)
+    val containerId: String,
+    val terminal: String?,
+    val carrierCode: String?,
+    val carrierName: String?,
+    val vesselCode: String?,
+    val vesselName: String?,
+    val status: String?,
+    val delivery: String?,
+    val onHold: String?,
+    val emptyFull: String?,
+    val isoCode: String?,
+    val containerCode: String?
+)

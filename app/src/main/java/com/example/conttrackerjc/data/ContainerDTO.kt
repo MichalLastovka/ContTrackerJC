@@ -27,3 +27,19 @@ fun ContainerDTO.toContainer(): Container{
         containerCode = umschlaege?.get(0)?.containerart?.value.toString()
     )
 }
+fun ContainerDTO.toPartialContainer(): PartialContainer{
+    return PartialContainer(
+        containerId = containerid.uppercase(),
+        terminal = umschlaege?.get(0)?.terminal?.value.toString(),
+        carrierCode = umschlaege?.get(0)?.reedercode?.value.toString(),
+        carrierName = umschlaege?.get(0)?.reedername?.en.toString(),
+        vesselCode = umschlaege?.get(0)?.schiffscode?.value.toString(),
+        vesselName = umschlaege?.get(0)?.schiffsname?.value.toString(),
+        status = umschlaege?.get(0)?.status.toString(),
+        delivery = umschlaege?.get(0)?.angeliefertAm?.value.toString(),
+        onHold = umschlaege?.get(0)?.gesperrt.toString(),
+        emptyFull = umschlaege?.get(0)?.vollmerkmal?.value.toString(),
+        isoCode = umschlaege?.get(0)?.isocode?.value.toString(),
+        containerCode = umschlaege?.get(0)?.containerart?.value.toString()
+    )
+}

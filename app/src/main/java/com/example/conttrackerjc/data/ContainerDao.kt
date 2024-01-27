@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContainerDao {
-    @Update
-    suspend fun updateContainer(container: Container)
+    @Update(entity = Container::class)
+    suspend fun updateContainer(container: PartialContainer)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertContainer(container: Container)

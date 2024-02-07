@@ -11,7 +11,8 @@ data class Container(
     val notifyOn: Boolean = false,
     val terminal: String?,
     val carrierCode: String?,
-    val carrierName: String?,
+    val carrierNameEN: String?,
+    val carrierNameDE: String?,
     val vesselCode: String?,
     val vesselName: String?,
     val status: String?,
@@ -21,13 +22,16 @@ data class Container(
     val isoCode: String?,
     val containerCode: String?
 )
+
+//PartialContainer serves for updating local database without overriding the "notify" data field
 @Entity
 data class PartialContainer(
     @PrimaryKey(autoGenerate = false)
     val containerId: String,
     val terminal: String?,
     val carrierCode: String?,
-    val carrierName: String?,
+    val carrierNameEN: String?,
+    val carrierNameDE: String?,
     val vesselCode: String?,
     val vesselName: String?,
     val status: String?,

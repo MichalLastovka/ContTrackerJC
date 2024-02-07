@@ -8,6 +8,35 @@ data class Umschlaege(
     val type: String?,
     @SerializedName("umschlagid")
     val umschlagid: String?,
+
+    /* CTT operator special fields care
+    @SerializedName("id")
+    val cttId: String?,
+    @SerializedName("facility")
+    val cttFacility: String?,
+    @SerializedName("containerOperatorId")
+    val cttContainerOperatorId: String?,
+    @SerializedName("containerOperatorName")
+    val cttContainerOperatorName: Reedername?,
+    @SerializedName("publicData")
+    val cttPublicData: PublicData?,
+    @SerializedName("detailedData")
+    val cttDetailedData: String?,
+    @SerializedName("transportOrderInbound")
+    val cttTransportOrderInbound: String?,
+    @SerializedName("transportOrderOutbound")
+    val cttTransportOrderOutbound: String?,
+    @SerializedName("containerServiceOrder")
+    val cttContainerServiceOrder: String?,
+    @SerializedName("physicalContainerData")
+    val cttPhysicalContainerData: String?,
+    @SerializedName("lastGateMovementAt")
+    val cttLastGateMovementAt: String?,
+    @SerializedName("transitState")
+    val cttTransitState: String?,
+    @SerializedName("archiviert")
+    val cttArchiviert: String?,*/
+
     @SerializedName("terminal")
     val terminal: Terminal?,
     @SerializedName("reedercode")

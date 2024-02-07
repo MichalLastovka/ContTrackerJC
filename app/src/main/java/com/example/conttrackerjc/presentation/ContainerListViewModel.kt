@@ -1,7 +1,11 @@
 package com.example.conttrackerjc.presentation
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.conttrackerjc.ConTrackerApp
 import com.example.conttrackerjc.data.Container
 import com.example.conttrackerjc.data.ContainerAPIService
@@ -10,6 +14,7 @@ import com.example.conttrackerjc.data.ContainersDatabase
 import com.example.conttrackerjc.data.PartialContainer
 import com.example.conttrackerjc.data.toContainer
 import com.example.conttrackerjc.data.toPartialContainer
+import com.example.conttrackerjc.domain.BackgroundCallWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class ContainerListViewModel : ViewModel(
 
@@ -28,16 +34,20 @@ class ContainerListViewModel : ViewModel(
     private var containerInterface: ContainerAPIService
     private val db = ContainersDatabase.getDaoInstance(ConTrackerApp.getAppContext())
     private val _stateFlow = MutableStateFlow(ContainerListState())
+
     val stateFlow: StateFlow<ContainerListState>
         get() = _stateFlow.asStateFlow()
 
+    fun switchNotificationPermission(result: Boolean) {
+        _stateFlow.update {
+            it.copy(hasNotificationPermission = result)
+        }
+    }
+
     init {
-        val retrofit: Retrofit = Retrofit.Builder()
-            .addConverterFactory(
-                GsonConverterFactory.create()
-            )
-            .baseUrl("https://coast.hhla.de/")
-            .build()
+        val retrofit: Retrofit = Retrofit.Builder().addConverterFactory(
+            GsonConverterFactory.create()
+        ).baseUrl("https://coast.hhla.de/").build()
         containerInterface = retrofit.create(ContainerAPIService::class.java)
     }
 
@@ -51,7 +61,24 @@ class ContainerListViewModel : ViewModel(
         }
     }
 
-    fun updateNotification(id: String, notify: Boolean){
+    val periodicWorker = PeriodicWorkRequestBuilder<BackgroundCallWorker>(
+        repeatInterval = 15,
+        repeatIntervalTimeUnit = TimeUnit.MINUTES
+    )
+
+    val workManager = WorkManager.getInstance(ConTrackerApp.getAppContext())
+
+    fun updateNotification(id: String, notify: Boolean) {
+        if (notify) {
+            val data = Data.Builder()
+            data.putString("container", id)
+            periodicWorker.setInputData(data.build())
+            workManager.enqueue(periodicWorker.build())
+            //workManager.beginUniqueWork("Test", ExistingWorkPolicy.KEEP, notificationRequest)
+            //.enqueue()
+        } else {
+            workManager.cancelAllWork()
+        }
         viewModelScope.launch(Dispatchers.IO) {
             db.updateNotification(id, notify)
         }
@@ -79,11 +106,10 @@ class ContainerListViewModel : ViewModel(
     }
 
     fun getContainer(container: String) {
-        containerInterface.getContainerInfo(contId = container).enqueue(
-            object : Callback<ContainerDTO> {
+        containerInterface.getContainerInfo(contId = container)
+            .enqueue(object : Callback<ContainerDTO> {
                 override fun onResponse(
-                    call: Call<ContainerDTO>,
-                    response: Response<ContainerDTO>
+                    call: Call<ContainerDTO>, response: Response<ContainerDTO>
                 ) {
                     response.body()?.let {
                         insertContainer(it.toContainer())
@@ -95,31 +121,29 @@ class ContainerListViewModel : ViewModel(
                 override fun onFailure(call: Call<ContainerDTO>, t: Throwable) {
                     t.printStackTrace()
                 }
-            }
-        )
+            })
     }
 
-    fun updateContainer(container: PartialContainer){
+    fun updateContainer(container: PartialContainer) {
         viewModelScope.launch(Dispatchers.IO) {
             db.updateContainer(container)
         }
     }
-    fun getAndUpdateContainer(id: String){
-        containerInterface.getContainerInfo(contId = id).enqueue(
-            object : Callback<ContainerDTO> {
-                override fun onResponse(
-                    call: Call<ContainerDTO>,
-                    response: Response<ContainerDTO>
-                ) {
-                    response.body()?.let {
-                        updateContainer(it.toPartialContainer())
-                    }
-                }
-                override fun onFailure(call: Call<ContainerDTO>, t: Throwable) {
-                    t.printStackTrace()
+
+    fun getAndUpdateContainer(id: String) {
+        containerInterface.getContainerInfo(contId = id).enqueue(object : Callback<ContainerDTO> {
+            override fun onResponse(
+                call: Call<ContainerDTO>, response: Response<ContainerDTO>
+            ) {
+                response.body()?.let {
+                    updateContainer(it.toPartialContainer())
                 }
             }
-        )
+
+            override fun onFailure(call: Call<ContainerDTO>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 
     fun switchDialog() {

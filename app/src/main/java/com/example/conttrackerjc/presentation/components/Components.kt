@@ -89,6 +89,7 @@ fun Terminal(
         }
 
         Text(
+            modifier = Modifier.padding(start = 10.dp),
             text = if (terminal.isNullOrBlank()) "Nedostupné" else terminal,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
@@ -119,8 +120,8 @@ fun Ship(
             Text(text = "Plavidlo")
         }
 
-        println(name + callSign)
         Text(
+            modifier = Modifier.padding(start = 10.dp),
             text = if (name == "null" && callSign == "null") "Nedostupné" else "$name ($callSign)",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
@@ -130,8 +131,10 @@ fun Ship(
 
 @Composable
 fun Reeder(
-    reeder: String?,
-    reederCode: String?
+    reederCode: String?,
+    reederEN: String?,
+    reederDE: String?
+
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -152,12 +155,53 @@ fun Reeder(
         }
 
         Text(
-            text = if (reeder == "") "Nedostupné" else "$reeder($reederCode)",
+            modifier = Modifier.padding(start = 10.dp),
+            text =
+            if (reederDE == "" && reederEN == ""){
+                "Nedostupné"
+            }else
+                when(reederDE){
+                    "" -> "$reederEN($reederCode)"
+                    else -> "$reederDE($reederCode)"
+                    },
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
     }
 }
+
+@Composable
+fun TimeOfDelivery(
+    time: String?
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier.width(40.dp),
+                painter = painterResource(id = R.drawable.clock),
+                contentDescription = "time"
+            )
+            Text(text = "Složeno")
+        }
+
+        Text(
+            modifier = Modifier.padding(start = 10.dp),
+            text = if (time == "") "Nedostupné" else "$time",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+
 
 @Preview(
     showSystemUi = true,

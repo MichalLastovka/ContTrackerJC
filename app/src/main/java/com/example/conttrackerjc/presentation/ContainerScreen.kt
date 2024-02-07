@@ -23,6 +23,7 @@ import com.example.conttrackerjc.data.Container
 import com.example.conttrackerjc.presentation.components.Reeder
 import com.example.conttrackerjc.presentation.components.Ship
 import com.example.conttrackerjc.presentation.components.Terminal
+import com.example.conttrackerjc.presentation.components.TimeOfDelivery
 import com.example.conttrackerjc.presentation.components.Title
 
 @Composable
@@ -38,35 +39,9 @@ fun ContainerScreen(
         Title(id = container.containerId, status = container.status)
         Terminal(terminal = container.terminal)
         Ship(name = container.vesselName, callSign = container.vesselCode)
-        Reeder(reeder = container.carrierName, container.carrierCode)
+        Reeder(reederCode = container.carrierCode, reederEN = container.carrierNameEN, reederDE = container.carrierNameDE)
+        TimeOfDelivery(time = container.delivery)
 
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(text = "Kód: ", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Text(text = container.containerCode.toString())
-        }
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(text = "Kód rejdaře: ", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Text(text = container.carrierCode.toString())
-        }
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(text = "Doručeno: ", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Text(text = container.delivery.toString())
-        }
     }
 }
 
@@ -78,5 +53,5 @@ fun ContainerScreen(
 fun PrevContainerScreen(
     
 ) {
-    ContainerScreen(container = Container(containerId="YMLU8786435", terminal="CTB", carrierCode="YML", carrierName=null, vesselCode="5LKX7", vesselName="ONE INNOVATION", status="GELOESCHT", delivery="2024-01-23T08:13:00+01:00", onHold="false", emptyFull="4", isoCode="45G1", containerCode="4N96"))
+    ContainerScreen(container = Container(containerId="YMLU8786435", terminal="CTB", carrierCode="YML", carrierNameDE =null,carrierNameEN =null, vesselCode="5LKX7", vesselName="ONE INNOVATION", status="GELOESCHT", delivery="2024-01-23T08:13:00+01:00", onHold="false", emptyFull="4", isoCode="45G1", containerCode="4N96"))
 }

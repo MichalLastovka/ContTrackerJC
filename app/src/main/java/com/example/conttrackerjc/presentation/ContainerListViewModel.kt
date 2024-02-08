@@ -1,6 +1,7 @@
 package com.example.conttrackerjc.presentation
 
 
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Data
@@ -26,6 +27,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class ContainerListViewModel : ViewModel(
@@ -61,23 +63,27 @@ class ContainerListViewModel : ViewModel(
         }
     }
 
-    val periodicWorker = PeriodicWorkRequestBuilder<BackgroundCallWorker>(
-        repeatInterval = 15,
-        repeatIntervalTimeUnit = TimeUnit.MINUTES
+    private val periodicWorker = PeriodicWorkRequestBuilder<BackgroundCallWorker>(
+        repeatInterval = 15, repeatIntervalTimeUnit = TimeUnit.MINUTES
     )
 
-    val workManager = WorkManager.getInstance(ConTrackerApp.getAppContext())
+    private val workManager = WorkManager.getInstance(ConTrackerApp.getAppContext())
 
-    fun updateNotification(id: String, notify: Boolean) {
+    fun updateNotification(id: String, notify: Boolean, uuid: UUID) {
         if (notify) {
+            println("Employing worker wit ID: $uuid")
             val data = Data.Builder()
             data.putString("container", id)
-            periodicWorker.setInputData(data.build())
-            workManager.enqueue(periodicWorker.build())
+            workManager.enqueue(periodicWorker.setId(uuid).build())
             //workManager.beginUniqueWork("Test", ExistingWorkPolicy.KEEP, notificationRequest)
             //.enqueue()
         } else {
-            workManager.cancelAllWork()
+            println("worker $uuid has been canceled")
+            workManager.cancelWorkById(uuid)
+            viewModelScope.launch(Dispatchers.IO) {
+                db.updateUuid(id, UUID.randomUUID())
+            }
+
         }
         viewModelScope.launch(Dispatchers.IO) {
             db.updateNotification(id, notify)
@@ -105,21 +111,49 @@ class ContainerListViewModel : ViewModel(
         }
     }
 
-    fun getContainer(container: String) {
+    fun getContainer(container: String, note: String) {
         containerInterface.getContainerInfo(contId = container)
             .enqueue(object : Callback<ContainerDTO> {
                 override fun onResponse(
                     call: Call<ContainerDTO>, response: Response<ContainerDTO>
                 ) {
+                    if (response.code() == 204) {
+                        updateIdText("")
+                        updateNoteText("")
+                        switchDialog()
+                        Toast.makeText(
+                            ConTrackerApp.getAppContext(),
+                            "Kontejner nenalezen",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+
                     response.body()?.let {
-                        insertContainer(it.toContainer())
+                        println(it)
+                        val newContainer = it.toContainer()
+                        newContainer.note = note
+                        insertContainer(newContainer)
                     }
                     updateIdText("")
+                    updateNoteText("")
                     switchDialog()
+                    Toast.makeText(
+                        ConTrackerApp.getAppContext(),
+                        "Kontejner nalezen a uložen do databáze.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onFailure(call: Call<ContainerDTO>, t: Throwable) {
-                    t.printStackTrace()
+                    updateIdText("")
+                    updateNoteText("")
+                    switchDialog()
+                    Toast.makeText(
+                        ConTrackerApp.getAppContext(),
+                        "Nedostupná síť",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
     }
@@ -148,13 +182,19 @@ class ContainerListViewModel : ViewModel(
 
     fun switchDialog() {
         _stateFlow.update {
-            it.copy(showDialog = !it.showDialog)
+            it.copy(enterIDText = "", enterNoteText = "", showDialog = !it.showDialog)
         }
     }
 
     fun updateIdText(text: String) {
         _stateFlow.update {
             it.copy(enterIDText = text.uppercase())
+        }
+    }
+
+    fun updateNoteText(text: String) {
+        _stateFlow.update {
+            it.copy(enterNoteText = text)
         }
     }
 }

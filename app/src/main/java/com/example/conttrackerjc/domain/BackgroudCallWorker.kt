@@ -11,7 +11,10 @@ import com.example.conttrackerjc.R
 import com.example.conttrackerjc.data.ContainerAPIService
 import com.example.conttrackerjc.data.ContainerDTO
 import com.example.conttrackerjc.data.ContainersDatabase
-import com.example.conttrackerjc.data.toContainer
+import com.example.conttrackerjc.data.toPartialContainer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,14 +26,8 @@ class BackgroundCallWorker(
     workerParameters: WorkerParameters,
 ) : CoroutineWorker(context, workerParameters) {
 
-    val containerID = inputData.getString("container")
+    private val containerID = inputData.getString("container")
     override suspend fun doWork(): Result {
-        //Call server for specific container data
-
-        //Compare brought data with local database entry (container id)
-
-        //If change in specific data field (status) trigger notification, else update data in local database
-
         if (containerID != null) {
             compareData(containerID)
         }
@@ -68,13 +65,15 @@ suspend fun compareData(container: String) {
                 call: Call<ContainerDTO>, response: Response<ContainerDTO>
             ) {
                 response.body()?.let {
-                    val newData = it.toContainer()
+                    val newData = it.toPartialContainer()
                     if (wanted != null) {
                         //Compares cached local data with data brought from server, if different, send notification
                         if (newData.status != wanted.status) {
-                            println(newData.status)
-                            println(wanted.status)
                             showNotification(newData.containerId, newData.status!!)
+
+                            CoroutineScope(context = Dispatchers.IO).launch {
+                                db.updateContainer(newData)
+                            }
                         }
                     }
                 }

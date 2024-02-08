@@ -33,7 +33,7 @@ fun ContainerScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(5.dp),
+            .padding(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Title(id = container.containerId, status = container.status)

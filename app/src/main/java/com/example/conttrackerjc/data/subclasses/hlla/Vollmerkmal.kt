@@ -1,9 +1,9 @@
-package com.example.conttrackerjc.data.subclasses
+package com.example.conttrackerjc.data.subclasses.hlla
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Reedercode(
+data class Vollmerkmal(
     @SerializedName("value")
     val value: String?,
     @SerializedName("valid")

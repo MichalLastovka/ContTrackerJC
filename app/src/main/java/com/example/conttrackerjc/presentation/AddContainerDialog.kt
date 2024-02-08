@@ -13,17 +13,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.conttrackerjc.ui.theme.CancelButtonRed
+import com.example.conttrackerjc.ui.theme.ConfirmButtonGreen
 
 @Composable
 fun AddContainerDialog(
-    text: String,
-    onValueChange: (String) -> Unit,
+    contText: String,
+    noteText: String,
+    onContValueChange: (String) -> Unit,
+    onNoteValueChange: (String) -> Unit,
     onDismiss: () -> Unit,
-    onConfirm: (String) -> Unit
+    onConfirm: (List<String>) -> Unit
 ) {
     Dialog(
         onDismissRequest = { }
@@ -37,13 +40,27 @@ fun AddContainerDialog(
             ) {
                 OutlinedTextField(
                     modifier = Modifier.padding(25.dp),
-                    value = text,
+                    value = contText,
+                    maxLines = 1,
                     onValueChange = {
-                                    onValueChange(it)
+                        onContValueChange(it)
                     },
                     placeholder = {
                         Row {
-                            Text(text = "Zadej ID kontejneru")
+                            Text(text = "Číslo kontejneru")
+                        }
+                    }
+                )
+                OutlinedTextField(
+                    modifier = Modifier.padding(horizontal = 25.dp),
+                    value = noteText,
+                    maxLines = 1,
+                    onValueChange = {
+                        onNoteValueChange(it)
+                    },
+                    placeholder = {
+                        Row {
+                            Text(text = "Poznámka (volitelné)", fontSize = 10.sp)
                         }
                     }
                 )
@@ -55,13 +72,14 @@ fun AddContainerDialog(
                 ) {
                     Button(
                         onClick = { onDismiss() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                        colors = ButtonDefaults.buttonColors(containerColor = CancelButtonRed)
                     ) {
                         Text(text = "Zrušit")
                     }
                     Button(
-                        onClick = { onConfirm(text) },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                        enabled = contText.isNotBlank(),
+                        onClick = { onConfirm((listOf(contText, noteText))) },
+                        colors = ButtonDefaults.buttonColors(containerColor = ConfirmButtonGreen)
                     ) {
                         Text(text = "Uložit")
                     }
@@ -69,14 +87,4 @@ fun AddContainerDialog(
             }
         }
     }
-}
-
-@Preview(
-    showBackground = true,
-)
-@Composable
-fun PrevAddContainerDialog(
-
-) {
-    AddContainerDialog(onConfirm = {}, onDismiss = {}, onValueChange = {}, text = "")
 }

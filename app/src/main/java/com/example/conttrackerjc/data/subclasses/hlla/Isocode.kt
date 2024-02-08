@@ -1,11 +1,11 @@
-package com.example.conttrackerjc.data.subclasses
+package com.example.conttrackerjc.data.subclasses.hlla
 
 
 import com.google.gson.annotations.SerializedName
 
-data class AngeliefertAm(
+data class Isocode(
     @SerializedName("value")
-    val value: Any?,
+    val value: String?,
     @SerializedName("valid")
     val valid: Boolean?
 )

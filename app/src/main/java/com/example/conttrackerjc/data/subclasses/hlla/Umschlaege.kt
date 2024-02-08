@@ -1,42 +1,20 @@
-package com.example.conttrackerjc.data.subclasses
+package com.example.conttrackerjc.data.subclasses.hlla
 
 
+import com.example.conttrackerjc.data.subclasses.ctt.ContainerOperatorName
+import com.example.conttrackerjc.data.subclasses.ctt.PhysicalContainerData
+import com.example.conttrackerjc.data.subclasses.ctt.PublicData
+import com.example.conttrackerjc.data.subclasses.ctt.TransportOrderInbound
+import com.example.conttrackerjc.data.subclasses.ctt.TransportOrderOutbound
 import com.google.gson.annotations.SerializedName
 
 data class Umschlaege(
+
+    //hhla type
     @SerializedName("@type")
     val type: String?,
     @SerializedName("umschlagid")
     val umschlagid: String?,
-
-    /* CTT operator special fields care
-    @SerializedName("id")
-    val cttId: String?,
-    @SerializedName("facility")
-    val cttFacility: String?,
-    @SerializedName("containerOperatorId")
-    val cttContainerOperatorId: String?,
-    @SerializedName("containerOperatorName")
-    val cttContainerOperatorName: Reedername?,
-    @SerializedName("publicData")
-    val cttPublicData: PublicData?,
-    @SerializedName("detailedData")
-    val cttDetailedData: String?,
-    @SerializedName("transportOrderInbound")
-    val cttTransportOrderInbound: String?,
-    @SerializedName("transportOrderOutbound")
-    val cttTransportOrderOutbound: String?,
-    @SerializedName("containerServiceOrder")
-    val cttContainerServiceOrder: String?,
-    @SerializedName("physicalContainerData")
-    val cttPhysicalContainerData: String?,
-    @SerializedName("lastGateMovementAt")
-    val cttLastGateMovementAt: String?,
-    @SerializedName("transitState")
-    val cttTransitState: String?,
-    @SerializedName("archiviert")
-    val cttArchiviert: String?,*/
-
     @SerializedName("terminal")
     val terminal: Terminal?,
     @SerializedName("reedercode")
@@ -76,5 +54,31 @@ data class Umschlaege(
     @SerializedName("zollZAPPFreigabe")
     val zollZAPPFreigabe: Any?,
     @SerializedName("lagerbereich")
-    val lagerbereich: Any?
+    val lagerbereich: Any?,
+
+    // ctt type
+    @SerializedName("containerOperatorId")
+    val containerOperatorId: String,
+    @SerializedName("containerOperatorName")
+    val containerOperatorName: ContainerOperatorName,
+    @SerializedName("containerServiceOrder")
+    val containerServiceOrder: Any?,
+    @SerializedName("detailedData")
+    val detailedData: Any?,
+    @SerializedName("facility")
+    val facility: String,
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("lastGateMovementAt")
+    val lastGateMovementAt: Any?,
+    @SerializedName("physicalContainerData")
+    val physicalContainerData: PhysicalContainerData?,
+    @SerializedName("publicData")
+    val publicData: PublicData,
+    @SerializedName("transitState")
+    val transitState: String,
+    @SerializedName("transportOrderInbound")
+    val transportOrderInbound: TransportOrderInbound,
+    @SerializedName("transportOrderOutbound")
+    val transportOrderOutbound: TransportOrderOutbound,
 )

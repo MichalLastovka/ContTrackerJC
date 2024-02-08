@@ -41,24 +41,29 @@ fun Title(
                     .width(35.dp),
                 painter = painterResource(
                     id =
-                    when (status) {
+                    when (status){
                         "GELOESCHT" -> R.drawable.container_crane
+                        "ARRIVED" -> R.drawable.container_crane
                         "CONTAINER_NICHT_GELOESCHT" -> R.drawable.container_ship2
-                        else -> {
-                            R.drawable.delivered
-                        }
+                        "ANNOUNCED" -> R.drawable.container_ship2
+                        "GESPERRT" -> R.drawable.pause_button
+                        else -> {R.drawable.delivered}
                     }
                 ),
                 contentDescription = "status"
             )
             Text(
                 modifier = Modifier.padding(start = 10.dp),
-                text = when (status) {
-                    "GELOESCHT" -> "(Složeno)"
-                    "CONTAINER_NICHT_GELOESCHT" -> "(Nesloženo)"
-                    else -> "Doručeno"
+                text =
+                when (status){
+                    "GELOESCHT" -> "Složeno"
+                    "ARRIVED" -> "Složeno"
+                    "CONTAINER_NICHT_GELOESCHT" -> "Na cestě"
+                    "ANNOUNCED" -> "Na cestě"
+                    "GESPERRT" -> "Pozastaveno"
+                    else -> status.toString()
                 },
-                color = if (status == "GELOESCHT") Color.Green else Color.Red,
+                color = if (status == "GELOESCHT" || status == "ARRIVED") Color.Green else Color.Red,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -137,7 +142,9 @@ fun Reeder(
 
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 5.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -175,7 +182,9 @@ fun TimeOfDelivery(
     time: String?
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 5.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {

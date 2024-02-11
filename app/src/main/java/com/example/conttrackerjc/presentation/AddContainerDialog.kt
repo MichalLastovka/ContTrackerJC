@@ -13,9 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.conttrackerjc.R
 import com.example.conttrackerjc.ui.theme.CancelButtonRed
 import com.example.conttrackerjc.ui.theme.ConfirmButtonGreen
 
@@ -47,7 +49,7 @@ fun AddContainerDialog(
                     },
                     placeholder = {
                         Row {
-                            Text(text = "Číslo kontejneru")
+                            Text(text = stringResource(R.string.add_dialog_container_number))
                         }
                     }
                 )
@@ -60,7 +62,7 @@ fun AddContainerDialog(
                     },
                     placeholder = {
                         Row {
-                            Text(text = "Poznámka (volitelné)", fontSize = 10.sp)
+                            Text(text = stringResource(R.string.add_dialog_note), fontSize = 10.sp)
                         }
                     }
                 )
@@ -74,14 +76,14 @@ fun AddContainerDialog(
                         onClick = { onDismiss() },
                         colors = ButtonDefaults.buttonColors(containerColor = CancelButtonRed)
                     ) {
-                        Text(text = "Zrušit")
+                        Text(text = stringResource(R.string.add_dialog_cancel_button))
                     }
                     Button(
                         enabled = contText.isNotBlank(),
                         onClick = { onConfirm((listOf(contText, noteText))) },
                         colors = ButtonDefaults.buttonColors(containerColor = ConfirmButtonGreen)
                     ) {
-                        Text(text = "Uložit")
+                        Text(text = stringResource(R.string.add_dialog_save_button))
                     }
                 }
             }

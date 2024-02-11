@@ -1,9 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ContTrackerJC</string>
     <string name="tracked_containers_column_name">Sledované kontejnery</string>
-    <string name="developer_signature" translatable="false">Developed by Michal Lastovka in 2024</string>
-    <string name="name_version" translatable="false">ContTracker (v-alpha)</string>
-    <string name="developer_email_contact" translatable="false">lasmich@protonmail.com</string>
     <string name="add_dialog_container_number">Číslo kontejneru</string>
     <string name="add_dialog_note">Poznámka (volitelné)</string>
     <string name="add_dialog_cancel_button">Zrušit</string>

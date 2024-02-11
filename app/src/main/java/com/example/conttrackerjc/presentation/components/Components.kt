@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,11 +57,11 @@ fun Title(
                 modifier = Modifier.padding(start = 10.dp),
                 text =
                 when (status){
-                    "GELOESCHT" -> "Složeno"
-                    "ARRIVED" -> "Složeno"
-                    "CONTAINER_NICHT_GELOESCHT" -> "Na cestě"
-                    "ANNOUNCED" -> "Na cestě"
-                    "GESPERRT" -> "Pozastaveno"
+                    "GELOESCHT" -> stringResource(R.string.container_status_arrived)
+                    "ARRIVED" -> stringResource(R.string.container_status_arrived)
+                    "CONTAINER_NICHT_GELOESCHT" -> stringResource(R.string.container_status_on_the_way)
+                    "ANNOUNCED" -> stringResource(R.string.container_status_on_the_way)
+                    "GESPERRT" -> stringResource(R.string.container_status_on_hold)
                     else -> status.toString()
                 },
                 color = if (status == "GELOESCHT" || status == "ARRIVED") Color.Green else Color.Red,
@@ -81,24 +82,27 @@ fun Terminal(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(.2f),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Image(
                 modifier = Modifier.width(40.dp),
                 painter = painterResource(id = R.drawable.terminal),
                 contentDescription = "terminal"
             )
-            Text(text = "Terminál")
+            Text(text = stringResource(R.string.icon_descr_terminal))
         }
+        Column(
 
-        Text(
-            modifier = Modifier.padding(start = 10.dp),
-            text = if (terminal.isNullOrBlank()) "Nedostupné" else terminal,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        ) {
+            Text(
+                modifier = Modifier.padding(start = 10.dp),
+                text = if (terminal.isNullOrBlank()) stringResource(R.string.icon_descr_not_available) else terminal,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -113,24 +117,25 @@ fun Ship(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(.2f),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Image(
                 modifier = Modifier.width(40.dp),
                 painter = painterResource(id = R.drawable.container_ship),
                 contentDescription = "ship"
             )
-            Text(text = "Plavidlo")
+            Text(text = stringResource(R.string.icon_descr_ship))
         }
-
-        Text(
-            modifier = Modifier.padding(start = 10.dp),
-            text = if (name == "null" && callSign == "null") "Nedostupné" else "$name ($callSign)",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Column {
+            Text(
+                modifier = Modifier.padding(start = 10.dp),
+                text = if (name == "null" && callSign == "null") stringResource(R.string.icon_descr_not_available) else "$name ($callSign)",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -149,31 +154,34 @@ fun Reeder(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(.2f),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Image(
                 modifier = Modifier.width(40.dp),
                 painter = painterResource(id = R.drawable.captain),
                 contentDescription = "captain"
             )
-            Text(text = "Rejdař")
+            Text(text = stringResource(R.string.icon_descr_reeder))
         }
-
-        Text(
-            modifier = Modifier.padding(start = 10.dp),
-            text =
-            if (reederDE == "" && reederEN == ""){
-                "Nedostupné"
-            }else
-                when(reederDE){
-                    "" -> "$reederEN($reederCode)"
-                    else -> "$reederDE($reederCode)"
+        Column(
+            modifier = Modifier
+        ) {
+            Text(
+                modifier = Modifier.padding(start = 10.dp),
+                text =
+                if (reederDE == "" && reederEN == ""){
+                    stringResource(R.string.icon_descr_not_available)
+                }else
+                    when(reederDE){
+                        "" -> "$reederEN($reederCode)"
+                        else -> "$reederDE($reederCode)"
                     },
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -189,24 +197,25 @@ fun TimeOfDelivery(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(.2f),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Image(
                 modifier = Modifier.width(40.dp),
                 painter = painterResource(id = R.drawable.clock),
                 contentDescription = "time"
             )
-            Text(text = "Složeno")
+            Text(text = stringResource(R.string.icon_descr_arrived))
         }
-
-        Text(
-            modifier = Modifier.padding(start = 10.dp),
-            text = if (time == "") "Nedostupné" else "$time",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Column {
+            Text(
+                modifier = Modifier.padding(start = 10.dp),
+                text = if (time == "") stringResource(R.string.icon_descr_not_available) else "$time",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 

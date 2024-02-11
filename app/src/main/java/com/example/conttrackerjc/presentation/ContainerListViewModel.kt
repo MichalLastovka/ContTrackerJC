@@ -71,15 +71,14 @@ class ContainerListViewModel : ViewModel(
 
     fun updateNotification(id: String, notify: Boolean, uuid: UUID) {
         if (notify) {
-            println("Employing worker wit ID: $uuid")
             val data = Data.Builder()
             data.putString("container", id)
-            workManager.enqueue(periodicWorker.setId(uuid).build())
+            workManager.enqueue(periodicWorker.setId(uuid).setInputData(data.build()).build())
             //workManager.beginUniqueWork("Test", ExistingWorkPolicy.KEEP, notificationRequest)
             //.enqueue()
         } else {
-            println("worker $uuid has been canceled")
             workManager.cancelWorkById(uuid)
+            workManager.pruneWork()
             viewModelScope.launch(Dispatchers.IO) {
                 db.updateUuid(id, UUID.randomUUID())
             }
@@ -106,9 +105,11 @@ class ContainerListViewModel : ViewModel(
     }
 
     fun deleteContainer(container: Container) {
+        workManager.cancelWorkById(container.uuid)
         viewModelScope.launch(Dispatchers.IO) {
             db.deleteContainer(container)
         }
+        switchDeleteDialog()
     }
 
     fun getContainer(container: String, note: String) {
@@ -183,6 +184,18 @@ class ContainerListViewModel : ViewModel(
     fun switchDialog() {
         _stateFlow.update {
             it.copy(enterIDText = "", enterNoteText = "", showDialog = !it.showDialog)
+        }
+    }
+
+    fun switchDeleteDialog(){
+        _stateFlow.update {
+            it.copy(showDeleteDialog = !it.showDeleteDialog)
+        }
+    }
+
+    fun assignToDelete(container: Container){
+        _stateFlow.update {
+            it.copy(containerToBeDeleted = container)
         }
     }
 

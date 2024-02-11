@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ContTrackerJC</string>
+    <string name="tracked_containers_column_name">Tracked containers</string>
+    <string name="add_dialog_container_number">Container number</string>
+    <string name="add_dialog_note">Note (optional)</string>
+    <string name="add_dialog_cancel_button">Cancel</string>
+    <string name="add_dialog_save_button">Save</string>
+    <string name="container_status_arrived">Arrived</string>
+    <string name="container_status_on_the_way">Transported</string>
+    <string name="container_status_on_hold">On hold</string>
+    <string name="icon_descr_terminal">Terminal</string>
+    <string name="icon_descr_not_available">Not available</string>
+    <string name="icon_descr_ship">Ship</string>
+    <string name="icon_descr_reeder">Carrier</string>
+    <string name="icon_descr_arrived">Arrived</string>
+    <string name="delete_container_dialog_title">Delete container?</string>
+    <string name="answer_no">No</string>
+    <string name="answer_yes">Yes</string>
+</resources>

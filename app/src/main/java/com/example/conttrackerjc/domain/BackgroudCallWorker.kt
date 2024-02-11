@@ -2,7 +2,6 @@ package com.example.conttrackerjc.domain
 
 import android.app.NotificationManager
 import android.content.Context
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -14,6 +13,7 @@ import com.example.conttrackerjc.data.ContainersDatabase
 import com.example.conttrackerjc.data.toPartialContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +31,6 @@ class BackgroundCallWorker(
         if (containerID != null) {
             compareData(containerID)
         }
-        Log.d("Custom Worker", "Success!")
         return Result.success()
     }
 }
@@ -68,6 +67,7 @@ suspend fun compareData(container: String) {
                     val newData = it.toPartialContainer()
                     if (wanted != null) {
                         //Compares cached local data with data brought from server, if different, send notification
+
                         if (newData.status != wanted.status) {
                             showNotification(newData.containerId, newData.status!!)
 
